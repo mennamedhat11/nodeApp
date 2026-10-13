@@ -87,5 +87,14 @@ pipeline {
     }
 
     post {
-        success { echo "Node app (${env.APP_ENV}) pipeline finished successfully" }
-        failure { echo "Node app
+        success {
+            echo "Node app (${env.APP_ENV}) pipeline finished successfully"
+        }
+        failure {
+            echo "Node app (${env.APP_ENV}) pipeline failed"
+        }
+        always {
+            sh 'docker image prune -f || true'
+        }
+    }
+}
