@@ -2,13 +2,12 @@ pipeline {
     agent any
 
     environment {
-        // غيّري القيم دي حسب بياناتك
-        DOCKERHUB_USER = 'mennamedhat123'
-        IMAGE_NAME     = "${DOCKERHUB_USER}/node-app"
-        IMAGE_TAG      = "${env.BUILD_NUMBER}"
-        CONTAINER_NAME = 'node-app'
-        HOST_PORT      = '3000'
-        DOCKERHUB_CREDS = 'dockerhub-creds'
+        DOCKERHUB_USER  = 'mennamedhat123'
+        IMAGE_NAME      = "${DOCKERHUB_USER}/node-app"
+        IMAGE_TAG       = "${env.BUILD_NUMBER}"
+        CONTAINER_NAME  = 'node-app'
+        HOST_PORT       = '3000'
+        DOCKERHUB_CREDS = 'Docker'
     }
 
     stages {
@@ -29,7 +28,7 @@ pipeline {
         stage('Push Image') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: "${Docker}",
+                    credentialsId: "${DOCKERHUB_CREDS}",
                     usernameVariable: 'DH_USER',
                     passwordVariable: 'DH_PASS')]) {
                     sh """
@@ -58,7 +57,7 @@ pipeline {
             steps {
                 sh """
                     sleep 5
-                    curl -f http://localhost:${HOST_PORT}/health
+                    docker exec ${CONTAINER_NAME} wget -qO- http://localhost:3000/health
                 """
             }
         }
