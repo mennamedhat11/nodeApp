@@ -57,7 +57,7 @@ pipeline {
             steps {
                 sh """
                     sleep 5
-                    docker exec ${CONTAINER_NAME} wget -qO- http://localhost:3000/health
+                    docker exec ${CONTAINER_NAME} wget -qO- http://127.0.0.1:3000/health
                 """
             }
         }
